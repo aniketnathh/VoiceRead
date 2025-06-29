@@ -72,8 +72,7 @@ function transformText(text, mood, narration) {
 
 // ====== Send Text to Murf API via Proxy and Play ======
 async function speakWithMurf(text, voiceId) {
-  const apiUrl = '/.netlify/functions/murf';
-
+  const apiUrl = '/api/murf';
   try {
     const response = await fetch(apiUrl, {
       method: 'POST',
