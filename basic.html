@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PDF Voice Reader</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  
+</head>
+<body id="body-root">
+
+
+  <!-- 🎙️ Decorative Microphone Icon -->
+  <div class="mic-icon">
+    <i class="fas fa-microphone"></i>
+  </div>
+
+  <!-- 🧠 Project Title -->
+  <h1 class="project-title">VocalDoc</h1>
+
+  <!-- 💬 Catchy Slogan -->
+  <p class="project-slogan">Turn <span class="highlight">PDFs</span> into <span class="highlight">Multilingual Voices</span> in Seconds.</p>
+
+
+
+
+<!-- Project Description -->
+<div class="project-intro">
+  
+  <p>A smart application that reads PDF files aloud in different languages and moods. It supports multiple narration styles, multilingual dubbing with Murf AI, real-time transcription, and smooth voice control features – all wrapped in an intuitive UI.</p>
+</div>
+
+
+ 
+
+  <!--<h2 id="app-title">VocalDoc</h2>-->
+
+
+
+<!-- 🗂 Upload first -->
+<div class="upload-box" id="upload-section">
+  <label for="pdf-upload">Upload PDF:</label>
+  <input type="file" id="pdf-upload" accept=".pdf" />
+</div>
+
+
+  <div class="dropdown-row">
+  <div class="dropdown-group inline-group">
+    <label for="mood">Mood:</label>
+    <div class="custom-select">
+      <select id="mood">
+        <option value="calm">Calm</option>
+        <option value="jolly">Jolly</option>
+        <option value="serious">Serious</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="dropdown-group inline-group">
+    <label for="narration">Narration:</label>
+  <div class="custom-select">
+      <select id="narration">
+        <option value="short">Short</option>
+        <option value="descriptive">Descriptive</option>
+        <option value="bullet">Bullet Points</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="dropdown-group inline-group">
+    <label for="dub-language">Language:</label>
+<div class="custom-select">
+      <select id="dub-language">
+        <option value="natalie">English</option>
+        <option value="matthias">German</option>
+        <option value="tao">Chinese</option>
+        <option value="elvira">Spanish</option>
+        <option value="kenji">Japanese</option>
+        <option value="theo">Indonesian</option>
+        <option value="lorenzo">Italian</option>
+        <option value="famke">Dutch</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="dropdown-group speed-group">
+  <label for="speedControl">Speech Speed: <span id="speed-value">1x</span></label>
+  <div class="speed-controls">
+    <button id="decrease-speed">−</button>
+    <input type="range" id="speedControl" min="0.5" max="2" step="0.1" value="1">
+    <button id="increase-speed">+</button>
+  </div>
+</div>
+
+
+
+  <div class="audio-player">
+    <audio id="audioPlayer" style="display: none;"></audio>
+  </div>
+
+  
+
+  <div class="controls">
+    <button id="play-btn" class="funky-btn"><i class="fas fa-play"></i> Play</button>
+    <button id="pause-btn" class="funky-btn"><i class="fas fa-pause"></i> Pause</button>
+    <button id="stop-btn" class="funky-btn"><i class="fas fa-stop"></i> Stop</button>
+  </div>
+
+ <!-- Features Section -->
+<div class="features-section">
+  <div class="feature-item feature-left">
+    <img src="img/multilingual.png" alt="Multilingual" class="feature-img">
+    <div>
+      <h3>Multilingual Text-to-Speech</h3>
+      <p>Read PDFs aloud in different languages using AI-powered Murf voice dubbing.</p>
+    </div>
+  </div>
+
+  <div class="feature-item feature-right">
+    <div>
+      <h3>Voice Mood & Narration Styles</h3>
+      <p>Choose between calm, jolly, or serious tones, and control narration style: short, bullet, or descriptive.</p>
+    </div>
+    <img src="img/mood.png" alt="Mood Selection" class="feature-img rotated-fix">
+  </div>
+
+  <div class="feature-item feature-left">
+    <img src="img/speed.jpeg" alt="Speech Speed Control" class="feature-img">
+    <div>
+      <h3>Voice Speed Control</h3>
+      <p>Change speed and control speech playback effortlessly.</p>
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+  
+  document.addEventListener("DOMContentLoaded", function () {
+  const featureItems = document.querySelectorAll(".feature-item");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const el = entry.target;
+
+      if (entry.isIntersecting) {
+        el.classList.remove('show'); // Reset
+        void el.offsetWidth;         // Force reflow
+        el.classList.add('show');    // Trigger again
+      } else {
+        el.classList.remove('show'); // Clear when out of view
+      }
+    });
+  }, {
+    threshold: 0.2
+  });
+
+  featureItems.forEach((item) => observer.observe(item));
+});
+
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const speedSlider = document.getElementById('speedControl');
+  const speedValue = document.getElementById('speed-value');
+  const increaseBtn = document.getElementById('increase-speed');
+  const decreaseBtn = document.getElementById('decrease-speed');
+  const audio = document.getElementById('audioPlayer');
+
+  function updateSpeed(newSpeed) {
+    const clampedSpeed = Math.min(2, Math.max(0.5, parseFloat(newSpeed.toFixed(1))));
+    speedSlider.value = clampedSpeed;
+    speedValue.textContent = clampedSpeed + "x";
+    audio.playbackRate = clampedSpeed;
+  }
+
+  // Plus button click
+  increaseBtn.addEventListener('click', () => {
+    updateSpeed(parseFloat(speedSlider.value) + 0.1);
+  });
+
+  // Minus button click
+  decreaseBtn.addEventListener('click', () => {
+    updateSpeed(parseFloat(speedSlider.value) - 0.1);
+  });
+
+  // Slider change
+  speedSlider.addEventListener('input', () => {
+    updateSpeed(parseFloat(speedSlider.value));
+  });
+});
+</script>
+
+</body>
+</html>
