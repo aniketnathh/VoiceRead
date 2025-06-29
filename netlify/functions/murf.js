@@ -1,4 +1,6 @@
 export async function handler(event) {
+  console.log("🔑 MURF_API_KEY:", process.env.MURF_API_KEY || 'NOT FOUND');
+
   try {
     const { text, voice_id } = JSON.parse(event.body);
 
