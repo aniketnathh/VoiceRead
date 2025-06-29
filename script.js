@@ -72,7 +72,7 @@ function transformText(text, mood, narration) {
 
 // ====== Send Text to Murf API via Proxy and Play ======
 async function speakWithMurf(text, voiceId) {
-  const apiUrl = 'http://localhost:3000/murf';
+  const apiUrl = '/.netlify/functions/murf';
 
   try {
     const response = await fetch(apiUrl, {
@@ -89,11 +89,11 @@ async function speakWithMurf(text, voiceId) {
     if (audioUrl) {
       return audioUrl;
     } else {
-      console.error(" No audio URL in response", data);
+      console.error("No audio URL in response", data);
       return null;
     }
   } catch (err) {
-    console.error(" Murf API error:", err);
+    console.error("Murf API error:", err);
     return null;
   }
 }
