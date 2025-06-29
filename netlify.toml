@@ -2,5 +2,5 @@
   directory = "netlify/functions"
 
 [build]
-  command = "npm run build" # or leave blank if you have no build step
-  publish = "."             # ensure it serves from root (where index.html is)
+  publish = "."
+  command = ""
