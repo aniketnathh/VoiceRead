@@ -1,6 +1,10 @@
+[build]
+  command = "npm run build"
+  publish = "."
+
 [functions]
+  node_bundler = "esbuild"
   directory = "netlify/functions"
 
-[build]
-  publish = "."
-  command = ""
+[build.environment]
+  MURF_API_KEY = "PLACEHOLDER"
