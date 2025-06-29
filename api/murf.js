@@ -1,4 +1,6 @@
 export default async function handler(req, res) {
+  console.log("🔑 MURF_SPEECH_API_KEY:", process.env.MURF_SPEECH_API_KEY);
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method Not Allowed" });
   }
